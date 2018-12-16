@@ -8,7 +8,7 @@ import concurrent.futures
 from data_vendors import AlphaVantage
 from data_vendors import IEXTrading
 from data_vendors import YahooFinance
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
 
 """
     Read from the csv file in the project folder
@@ -47,17 +47,17 @@ def main(key):
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         future_to_symbol_value = {executor.submit(yahoo_finance.readStockData, sym) for sym in nasdaqSymbols}
-        for future in concurrent.futures.as_completed(future_to_symbol_value):
-            symbol_value=future_to_symbol_value[future]
-            try:
-                data = future.result()
-            except Exception as ex:
-                logging.error(str(ex))
-            else:
-                logging.info("{}-{}".format(symbol_value, data))
+        #for future in concurrent.futures.as_completed(future_to_symbol_value):
+            #symbol_value=future_to_symbol_value[future]
+            #try:
+                #data = future.result()
+            #except Exception as ex:
+                #logging.error(str(ex))
+            #else:
+                #logging.info("{}-{}".format(symbol_value, data))
 
     end_time = time.time()
-    logging.info("took {} mins for {}".format(str((end_time-start_time)/60)), str(sum))
+    logging.info("took {} mins".format(str((end_time-start_time)/60)))
 
 
 
