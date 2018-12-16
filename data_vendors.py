@@ -12,6 +12,7 @@ class YahooFinance():
         scraper=Scraper(src_url='https://finance.yahoo.com/quote',regex='Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)')
         price=scraper.get_quote(symbol)
         logging.info("price for {} is {}".format(symbol,price))
+        return price
 """
     15 min delayed quotes from all symbols not
     recently used by IEX traders.
