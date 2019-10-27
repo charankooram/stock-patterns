@@ -1,53 +1,53 @@
-import csv
-import requests
-import argparse
 import logging
+import time
+import configparser
+from cache import *
 from data_vendors import AlphaVantage
 from data_vendors import IEXTrading
 from data_vendors import YahooFinance
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-
-"""
-    Read from the csv file in the project folder
-    and extract all the symbol names from the first column
-    of this csv file.
-"""
-def getNYSEsymbols():
-    nyse = []
-    try:
-        with open('companylist.csv') as csvfile:
-            csv_reader = csv.reader(csvfile, delimiter=',')
-            line = 0
-            for row in csv_reader:
-                if line > 0:
-                    nyse.append(row[0])
-                line += 1
-    except Exception as ex:
-        logging.error(str(ex))
-    return nyse
+from util.utility import *
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 
-
-
-def main(key):
-    nyseSymbols=getNYSEsymbols()
-    for symbol in nyseSymbols:
-        #alpha_exchange.readStockData(symbol, key)
-        #iex_trading.readStockData(symbol)
-        yahoo_finance.readStockData(symbol)
-
-
-
-
+def main(vendor):
+    """
+        Read from the companies list and fetch the quotes for
+        these stickers from the given vendor and do tasks from
+        the utility module with these stock information.
+    """
+    getNYSEsymbols()
+    start_time=time.time()
+    for symbol, stock in Cache.stocks.items():
+        if '^' in symbol or \
+           '.' in symbol or \
+           ' ' in symbol:
+            continue
+        try:
+            price=vendor.readStockData(symbol)
+            stock.set_price(price)
+        except Exception as price_exc:
+            logging.error('could not fetch %s - %s' %(symbol, str(price_exc)))
+        time.sleep(0.01)  # control the load on vendor between requests.
+    end_time=time.time()
+    logging.info('%s mins to process %d stocks' %((end_time-start_time)/60,len(Cache.stocks)))
+    list_all_sectors()
 
 
 if __name__ == "__main__":
-    logging.info("Identify NYSE symbols passing ERBO pattern")
-    alpha_exchange = AlphaVantage()
-    iex_trading = IEXTrading()
-    yahoo_finance= YahooFinance()
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--key", help="Enter api-key for alpha avantage api access")
-    args=parser.parse_args()
-    main(args.key)
+    config=configparser.ConfigParser()
+    config.read('conf.ini')
+    vendor_param=config['source']['stock_vendor']
+    threshold_param=config['threshold']['value']
+    key_param=config['alpha']['key']
+    logging.info("Identify NYSE symbols < %s" %threshold_param)
+    vendor=None
+    if vendor_param == 'yahoo':
+        vendor=YahooFinance()
+    elif vendor_param == 'alpha':
+        vendor=AlphaVantage(key_param)
+    else:
+        vendor=IEXTrading()
+
+    logging.debug(vendor)
+    main(vendor)
 
