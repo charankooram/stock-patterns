@@ -1,7 +1,5 @@
-import logging
 import time
 import configparser
-from cache import *
 from data_vendors import AlphaVantage
 from data_vendors import IEXTrading
 from data_vendors import YahooFinance
@@ -35,7 +33,7 @@ def main(vendor):
 
 if __name__ == "__main__":
     config=configparser.ConfigParser()
-    config.read('conf.ini')
+    config.read('config/conf.ini')
     vendor_param=config['source']['stock_vendor']
     threshold_param=config['threshold']['value']
     key_param=config['alpha']['key']

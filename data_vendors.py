@@ -1,6 +1,6 @@
 import requests
 import logging
-from scraper import Scraper
+from util.scraper import Scraper
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 """
@@ -10,7 +10,10 @@ class YahooFinance():
     def __init__(self):
         pass
     def readStockData(self, symbol):
-        scraper=Scraper(src_url='https://finance.yahoo.com/quote',regex='Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)')
+        scraper=Scraper(
+            src_url='https://finance.yahoo.com/quote',
+            regex='Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)'
+        )
         price=scraper.get_quote(symbol)
         logging.debug("price for {} is {}".format(symbol,price))
         float_price_array=price.split(',')

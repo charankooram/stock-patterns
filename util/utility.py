@@ -1,6 +1,6 @@
 import csv
 import logging
-from cache import Cache
+from cache.cache import Cache
 from model.stock import Stock
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
@@ -11,7 +11,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 """
 def getNYSEsymbols():
     try:
-        with open('companylist.csv') as csvfile:
+        with open('data/companylist.csv') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=',')
             line = 0
             for row in csv_reader:
@@ -31,8 +31,8 @@ def getNYSEsymbols():
         logging.error(str(ex))
 
 def list_all_sectors():
-    sectors=[]
+    sectors={}
     for symbol, stock in Cache.stocks.items():
-        if stock.sector not in sectors.keys():
-            sectors.append(stock.sector)
-    logging.info(sectors)
+        if stock.sector not in sectors():
+            sectors[stock.sector]=None
+    logging.info(sectors.keys())
