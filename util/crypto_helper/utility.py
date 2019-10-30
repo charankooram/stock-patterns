@@ -19,8 +19,8 @@ def get_cryptos():
     slist = __map(soup.find_all("span", class_='currency-symbol visible-xs'))
     nlist = __map(soup.find_all("a", class_='currency-name-container link-secondary'))
     plist = __map(soup.find_all("a", class_='price'))
-    logging.debug('populating cache')
 
+    logging.debug('populating cache')
     pointer = 0
     for s in slist:
         n = nlist[pointer]
