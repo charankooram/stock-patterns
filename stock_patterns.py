@@ -3,7 +3,7 @@ import configparser
 from data_vendors import AlphaVantage
 from data_vendors import IEXTrading
 from data_vendors import YahooFinance
-from util.utility import *
+from util.stock_helper.utility import *
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 

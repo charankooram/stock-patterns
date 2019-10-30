@@ -3,6 +3,13 @@ import logging
 from util.scraper import Scraper
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
+def parse_price(p):
+    float_price_array = p.split(',')
+    float_string = ''
+    for fp in float_price_array:
+        float_string = float_string + fp
+    return float(float_string)
+
 """
     Scrape quotes directly from Yahoo Finance Web Portal.
 """
@@ -12,15 +19,19 @@ class YahooFinance():
     def readStockData(self, symbol):
         scraper=Scraper(
             src_url='https://finance.yahoo.com/quote',
-            regex='Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)'
+            regex='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)'
         )
-        price=scraper.get_quote(symbol)
+        price=scraper.get_stock_quote(symbol)
         logging.debug("price for {} is {}".format(symbol,price))
-        float_price_array=price.split(',')
-        float_string=''
-        for fp in float_price_array:
-            float_string=float_string+fp
-        return float(float_string)
+        return parse_price(price)
+    def readCurrencyData(self, symbol):
+        scraper=Scraper(
+            src_url='https://finance.yahoo.com/quote',
+            regex='Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'
+        )
+        price=scraper.get_currency_quote(symbol)
+        logging.debug("price for {} is {}".format(symbol, price))
+        return parse_price(price)
 """
     15 min delayed quotes from all symbols not
     recently used by IEX traders.

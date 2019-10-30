@@ -11,7 +11,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 """
 def getNYSEsymbols():
     try:
-        with open('data/companylist.csv') as csvfile:
+        with open('data/nysecompanylist.csv') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=',')
             line = 0
             for row in csv_reader:
@@ -36,3 +36,4 @@ def list_all_sectors():
         if stock.sector not in sectors():
             sectors[stock.sector]=None
     logging.info(sectors.keys())
+
