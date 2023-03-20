@@ -13,3 +13,6 @@ class Stock:
 
     def set_price(self, price):
         self.price=price
+
+    def __str__(self):
+        return self.name + ' ' + self.symbol + ' ' + str(self.price)

@@ -23,6 +23,8 @@ def main(vendor):
         try:
             price=vendor.readStockData(symbol)
             stock.set_price(price)
+            if price < 20:
+                print(stock)
         except Exception as price_exc:
             logging.error('could not fetch %s - %s' %(symbol, str(price_exc)))
         time.sleep(0.01)  # control the load on vendor between requests.

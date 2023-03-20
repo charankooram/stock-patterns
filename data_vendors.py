@@ -1,7 +1,7 @@
 import requests
 import logging
 from util.scraper import Scraper
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 
 def parse_price(p):
     float_price_array = p.split(',')
