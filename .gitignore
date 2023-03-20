@@ -1,0 +1,11 @@
+.idea/*
+__pycache__/*
+cache/*
+model/__pycache__/*
+util/__pycache__/*
+util/crypto_helper/__pycache__/*
+util/currency_helper/__pycache__/*
+util/stock_helper/__pycache__/*
+
+
+
